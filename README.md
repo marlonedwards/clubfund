@@ -1,5 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain`]().
+# Clubfund
+Clubfund is a financial management application for university organizations built on Base.
 
+Students and faculty are able to
+- Create clubs and organizations
+- Add administrators and treasurers
+- Create and fund campaigns
+- Expense and reimburse members within their organizations
+
+This platform is especially useful for alumni, families, and friends who may want to contribute to university causes without going through the traditionally tedious process of campus finance offices.
+
+## Running Clubfund
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain`]().
 
 ## Getting Started
 
