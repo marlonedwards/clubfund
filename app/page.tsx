@@ -27,7 +27,7 @@ export default function Home() {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Run a Funding Campaign</h2>
             <p className="text-gray-600 mb-4">
-              Raise funds for your organization's events, projects, or operating expenses.
+              Raise funds for your organization&apos;s events, projects, or operating expenses.
             </p>
             <Link href="/campaigns/create" className="block text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
               Create Campaign

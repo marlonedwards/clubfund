@@ -10,18 +10,14 @@ import {
  CONTRACT_ADDRESSES, 
  fundingPoolABI,
  expenseApprovalABI,
- organizationABI 
 } from '@/utils/contracts';
-import { encodeFunctionData, parseAbi } from 'viem';
-
-// Fixed ETH to USD conversion rate
-const ETH_TO_USD_RATE = 1800;
+import { encodeFunctionData } from 'viem';
 
 export default function SubmitExpense() {
  const { address } = useAccount();
  const router = useRouter();
  const searchParams = useSearchParams();
- const [campaigns, setCampaigns] = useState<any[]>([]);
+ const [campaigns, setCampaigns] = useState();
  const [loading, setLoading] = useState(true);
  const [formData, setFormData] = useState({
    description: '',

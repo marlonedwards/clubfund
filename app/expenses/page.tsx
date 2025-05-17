@@ -29,7 +29,7 @@ const getStatusBadge = (status: number) => {
 };
 
 export default function Expenses() {
- const [expenses, setExpenses] = useState<any[]>([]);
+ const [expenses, setExpenses] = useState();
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
 

@@ -10,7 +10,7 @@ export default function Organizations() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orgAddressToIndexMap, setOrgAddressToIndexMap] = useState<Record<string, number>>({});
-
+  console.log(orgAddressToIndexMap);
   useEffect(() => {
     async function fetchOrganizations() {
       try {
