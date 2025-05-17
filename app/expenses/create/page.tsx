@@ -17,7 +17,7 @@ export default function SubmitExpense() {
  const { address } = useAccount();
  const router = useRouter();
  const searchParams = useSearchParams();
- const [campaigns, setCampaigns] = useState();
+ const [campaigns, setCampaigns] = useState<any[]>([]);
  const [loading, setLoading] = useState(true);
  const [formData, setFormData] = useState({
    description: '',
