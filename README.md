@@ -9,7 +9,10 @@ Students and faculty are able to
 
 This platform is especially useful for alumni, families, and friends who may want to contribute to university causes without going through the traditionally tedious process of campus finance offices.
 
-## Running Clubfund
+## Live Deployment
+https://clubfund.vercel.app/
+
+## Running Clubfund Locally
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain`]().
 
