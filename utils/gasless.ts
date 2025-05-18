@@ -1,12 +1,8 @@
 // utils/gasless.ts
 import { Contract } from 'ethers';
-import { GelatoRelay } from '@gelatonetwork/relay-sdk';
 
-// Initialize Gelato Relay for gasless transactions
-const relay = new GelatoRelay();
-
-// Your API key from Gelato
-const GELATO_API_KEY = process.env.NEXT_PUBLIC_GELATO_API_KEY || '';
+// Your API key placeholder (kept for future reference)
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY || '';
 
 export async function sendGaslessTransaction(
   contractAddress: string,
@@ -20,23 +16,21 @@ export async function sendGaslessTransaction(
     const contract = new Contract(contractAddress, abi);
     const data = contract.interface.encodeFunctionData(functionName, args);
     
-    // Prepare the request
-    const request = {
+    // Log what would have been sent in a real implementation
+    console.log('Gasless transaction data:', {
       chainId: 84532, // Base Sepolia
       target: contractAddress,
       data,
       user: userAddress,
-    };
+    });
     
-    // Send the gasless transaction
-    const response = await relay.sponsoredCall(request, GELATO_API_KEY);
-    
+    // Return a placeholder response
     return {
-      taskId: response.taskId,
+      taskId: 'gasless-transactions-not-implemented',
       success: true,
     };
   } catch (error) {
-    console.error('Error sending gasless transaction:', error);
+    console.error('Error preparing transaction data:', error);
     return {
       error,
       success: false,

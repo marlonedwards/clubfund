@@ -5,12 +5,26 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getOrganizations, getOrganizationMemberCount } from '@/utils/contracts';
 
+// Define the organization type
+interface Organization {
+  id: string;
+  address: `0x${string}`;
+  name: string;
+  description: string;
+  mission: string;
+  memberCount: number;
+  createdAt: string;
+}
+
 export default function Organizations() {
-  const [organizations, setOrganizations] = useState([]);
+  // Define the proper initial state type
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orgAddressToIndexMap, setOrgAddressToIndexMap] = useState<Record<string, number>>({});
+  
   console.log(orgAddressToIndexMap);
+  
   useEffect(() => {
     async function fetchOrganizations() {
       try {
@@ -29,7 +43,7 @@ export default function Organizations() {
               const memberCount = await getOrganizationMemberCount(org.address);
               return {
                 id: index.toString(), // Use numeric index for routing
-                address: org.address,
+                address: org.address as `0x${string}`,
                 name: org.name,
                 description: org.description,
                 mission: org.mission,

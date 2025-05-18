@@ -14,13 +14,41 @@ import {
   fundingPoolABI
 } from '@/utils/contracts';
 
+// Define interfaces for better type safety
+interface OrganizationData {
+  id: string;
+  address: string;
+  name: string;
+  description: string;
+  mission: string;
+  createdAt: string;
+  admin: string;
+  adminName: string;
+}
+
+interface MemberData {
+  address: string;
+  name: string;
+  role: string;
+}
+
+interface CampaignData {
+  id: string;
+  name: string;
+  description: string;
+  goal: number;
+  collected: number;
+  deadline: string;
+  status: string;
+}
+
 export default function OrganizationDetail({ params }: { params: { id: string } }) {
   const { address } = useAccount();
   const [newMemberAddress, setNewMemberAddress] = useState('');
   const [newTreasurerAddress, setNewTreasurerAddress] = useState('');
-  const [organization, setOrganization] = useState<any>(null);
-  const [members, setMembers] = useState<any[]>([]);
-  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [organization, setOrganization] = useState<OrganizationData | null>(null);
+  const [members, setMembers] = useState<MemberData[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -86,7 +114,7 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
         });
 
         // Fetch members
-        const membersArray = [];
+        const membersArray: MemberData[] = [];
         for (let i = 0; i < Number(memberCount); i++) {
           const memberAddress = await publicClient.readContract({
             address: orgAddress as `0x${string}`,
@@ -109,8 +137,8 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
               : 'Member';
 
           membersArray.push({
-            address: memberAddress,
-            name: `${memberAddress.slice(0, 6)}...${memberAddress.slice(-4)}`,
+            address: memberAddress as string,
+            name: `${(memberAddress as string).slice(0, 6)}...${(memberAddress as string).slice(-4)}`,
             role
           });
         }
@@ -127,22 +155,20 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
           setIsAdmin(address === adminAddress);
         }
         
-
         // Set organization data
         setOrganization({
           id: params.id,
-          address: orgAddress,
-          name,
-          description,
-          mission,
+          address: orgAddress as string,
+          name: name as string,
+          description: description as string,
+          mission: mission as string,
           createdAt: new Date(Number(creationDate) * 1000).toISOString().split('T')[0],
-          admin: adminAddress,
+          admin: adminAddress as string,
           adminName: `${(adminAddress as string).slice(0, 6)}...${(adminAddress as string).slice(-4)}`,
         });
         
         setMembers(membersArray);
         
-
         try {
           const campaignCount = await publicClient.readContract({
             address: CONTRACT_ADDRESSES.fundingPool as `0x${string}`,
@@ -150,7 +176,7 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
             functionName: 'campaignCount'
           });
           
-          const campaignsArray = [];
+          const campaignsArray: CampaignData[] = [];
           for (let i = 0; i < Number(campaignCount); i++) {
             const campaign = await publicClient.readContract({
               address: CONTRACT_ADDRESSES.fundingPool as `0x${string}`,
@@ -161,10 +187,10 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
             
             // Check if this campaign belongs to the current organization
             if (campaign[7].toLowerCase() === orgAddress.toLowerCase()) {
-              const campaignDetails = {
+              const campaignDetails: CampaignData = {
                 id: i.toString(),
-                name: campaign[0],
-                description: campaign[1],
+                name: campaign[0] as string,
+                description: campaign[1] as string,
                 goal: Number(campaign[2]),
                 collected: Number(campaign[3]),
                 deadline: Number(campaign[4]) > 0 ? new Date(Number(campaign[4]) * 1000).toLocaleDateString() : 'No deadline',
@@ -180,11 +206,10 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
           console.error("Failed to fetch campaign data:", err);
           // Fallback to mock data if real data fails
           setCampaigns([
-            { id: '1', name: 'Annual Tech Conference', goal: 5000, collected: 3250, status: 'ACTIVE' },
-            { id: '3', name: 'Club Equipment Fund', goal: 2000, collected: 800, status: 'ACTIVE' },
+            { id: '1', name: 'Annual Tech Conference', description: '', goal: 5000, collected: 3250, deadline: '', status: 'ACTIVE' },
+            { id: '3', name: 'Club Equipment Fund', description: '', goal: 2000, collected: 800, deadline: '', status: 'ACTIVE' },
           ]);
         }
-        
 
       } catch (err) {
         console.error("Failed to fetch organization data:", err);
@@ -199,12 +224,12 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
 
   // Join organization function
   const joinOrganizationCall = async () => {
-    if (!organization?.address) return [];
+    if (!organization?.address || !address) return [];
     
     const data = encodeFunctionData({
       abi: organizationABI,
       functionName: 'addMember',
-      args: [address]
+      args: [address as `0x${string}`]
     });
     
     return [{
@@ -220,7 +245,7 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
     const data = encodeFunctionData({
       abi: organizationABI,
       functionName: 'addMember',
-      args: [newMemberAddress]
+      args: [newMemberAddress as `0x${string}`]
     });
     
     return [{
@@ -236,7 +261,7 @@ export default function OrganizationDetail({ params }: { params: { id: string } 
     const data = encodeFunctionData({
       abi: organizationABI,
       functionName: 'addTreasurer',
-      args: [newTreasurerAddress]
+      args: [newTreasurerAddress as `0x${string}`]
     });
     
     return [{
